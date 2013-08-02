@@ -1,7 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Domine);
 
 body {
-  margin: 0 50px;
+  margin: 0;
+  font-family: 'Domine', serif;
 }
 
 .showtitle {
@@ -11,14 +12,36 @@ body {
 header {
   text-align: center;
   padding-bottom: 20px;
-  margin-bottom: 70px; 
+}
+
+nav {
+  text-align: center;
+  margin-top: 1em;
+  font-size: 120%;
+  color: #777;
+  background: #222;
+}
+
+nav a {
+  padding: 0.5em 1em;
+  text-decoration: none;
+  display: inline-block;
+}
+
+nav a:hover {
+  background: #777;
+  color: #222;
+}
+
+#roles {
+  color: rgb(182,48,28);
+  font-size: 130%;
 }
 
 h1 {
   font-weight: normal;
   font-size: 300%;
-  margin-bottom: 0px;
-  font-family: 'Domine', serif;
+  margin-bottom: 0.5em;
 }
 
 h1 a {
@@ -27,7 +50,7 @@ h1 a {
 
 h2 {
   font-weight: normal;
-  font-size: 120%;
+  font-size: 100%;
   margin-top: 20px;
   margin-bottom: 10px;
 }
@@ -36,6 +59,19 @@ a {
   color: inherit;
 }
 
-span#roles {
-  font-variant: small-caps;
+#content {
+  max-width: 900px;
+  padding: 5px;
+  margin: 0 auto;
+  line-height: 1.5;
+  font-size: 16pt;
+}
+
+#content a:hover {
+  background: #777;
+  color: white;
+}
+
+.loner {
+  margin-top: 3em;
 }
