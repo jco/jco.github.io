@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>MainStage Patch List Generator</title>
+<style type="text/css">
+body {
+    /* font-family: "Helvetica Neue"; */
+    /* font-family: "Helvetica"; */
+    /* font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; */
+    /* font-family: SanFranciscoText-Regular; */
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+}
+
+h1 {
+    font-weight: 300;
+}
+
+ul {
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 30px;
+}
+
+ul.concert-items {
+    padding-left: 0;
+}
+
+
+.set-name, .patch-name {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    gap: 3px;
+}
+
+.chevron, .patch-number {
+    width: 26px;
+    display: inline-block;
+    text-align: right;
+}
+
+.patch-number {
+    font-size: 10pt;
+    color: #444;
+}
+
+.chevron {
+    padding-bottom: 3px;
+}
+
+.icon {
+    width: 40px;
+    object-fit: contain;
+}
+#drop_area {
+    height: 400px;
+    background-color: #EEE;
+    border: 2px solid #AAA;
+    font-size: 32pt;
+    color: #AAA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+code {
+    font-size: 28pt;
+    padding: 0.2em;
+    padding-top: 0.4em;
+}
+
+.channel-names {
+    padding-left: 8px;
+    font-size: 0.8em;
+    color: #444;
+}
+
+.hide {
+    display:none !important;
+}
+</style>
+</head>
+
+<body>
+    <div id="drop_area">Drag a <code>.concert</code> file here</div>
+    <div id="content-target"></div>
+<script src="bundle.js"></script>
+</body>
+
+</html>
