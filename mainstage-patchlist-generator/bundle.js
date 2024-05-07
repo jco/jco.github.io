@@ -63,6 +63,8 @@ dropArea.addEventListener('drop', async (event) => {
     event.preventDefault();
 
     for (const item of event.dataTransfer.items) {
+        console.log(item);
+        console.log(await item.webkitGetAsEntry());
         const entry = await item.getAsFileSystemHandle();
         // FIXME properly make sure this is a directory, is a .concert, etc
 
@@ -1974,9 +1976,7 @@ function swapBytes(buffer) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"big-integer":2,"buffer":6,"fs":4}],4:[function(require,module,exports){
-
-},{}],5:[function(require,module,exports){
+},{"big-integer":2,"buffer":6,"fs":5}],4:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -2127,6 +2127,8 @@ function fromByteArray (uint8) {
 
   return parts.join('')
 }
+
+},{}],5:[function(require,module,exports){
 
 },{}],6:[function(require,module,exports){
 (function (Buffer){(function (){
@@ -3909,7 +3911,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":5,"buffer":6,"ieee754":7}],7:[function(require,module,exports){
+},{"base64-js":4,"buffer":6,"ieee754":7}],7:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
