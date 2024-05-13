@@ -83,11 +83,31 @@ code {
 .hide {
     display:none !important;
 }
+
+kbd {
+    font-weight: bold;
+    background: #EEE;
+    padding: 0.3em;
+    border-radius: 4px;
+}
+
+#instructions ul {
+    list-style-type: circle;
+    line-height: 1.5;
+}
 </style>
 </head>
 
 <body>
     <div id="drop_area">Drag a <code>.concert</code> file here</div>
+    <div id="instructions">
+        <h1>Known issues:</h1>
+        <ul>
+            <li>Will fail silently on MainStage concerts with patch or set names containing certain special characters,
+                such as <kbd>/</kbd> or <kbd>?</kbd>.</li>
+            <li>Only works on Chrome.</li>
+        </ul>
+    </div>
     <div id="content-target"></div>
 <script src="bundle.js"></script>
 </body>
