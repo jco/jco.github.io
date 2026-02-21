@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
   <title>Next Trains</title>
 <style type="text/css">
 html {
@@ -11,13 +14,13 @@ html {
 
 body {
   margin: 0;
-  background: #111;
-  color: #eee;
+  background: white;
+  color: #111;
   font-family: system-ui, sans-serif;
 }
 
 main {
-  margin: 0.25rem 1rem;
+  margin: 0;
 }
 
 ul {
@@ -27,8 +30,8 @@ ul {
 }
 
 li {
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #333;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #CCC;
   font-size: 1.2rem;
   display: flex;
   justify-content: space-between;
@@ -37,23 +40,24 @@ li {
 }
 
 .route {
-    background-color: yellow;
-    color: black;
-    border-radius: 50%;
-    display: inline-block;
-    text-align: center;
-    width: 1.5em;
-    height: 1.5em;
-    line-height: 1.5em;
+  background-color: rgb(248, 217, 74);
+  color: #111;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  width: 1.4em;
+  height: 1.4em;
+  line-height: 1.4em;
   font-weight: bold;
 }
 
-.time {
-  /* display: flex; */
+.min, .ampm {
+  font-size: 0.7em;
 }
 
-.min, .ampm {
-    font-size: 0.7em;
+.separator {
+  font-weight: 200;
+  color: #AAA;
 }
 
 
@@ -141,7 +145,7 @@ function render(departures) {
     var departureTime = hours + ":" + (minutes < 10 ? "0" : "") + minutes;
 
     const li = document.createElement("li");
-    li.innerHTML = `<span class="route">${route}</span> <span class="time">${departureTime} <span class="ampm">${ampm}</span> &mdash; ${minsAway} <span class="min">min</span></span>`;
+      li.innerHTML = `<span class="route">${route}</span> <span class="time">${departureTime} <span class="ampm">${ampm}</span> <span class="separator">&mdash;</span> ${minsAway} <span class="min">min</span></span>`;
 
     departuresEl.appendChild(li);
   });
