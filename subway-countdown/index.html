@@ -45,14 +45,16 @@ li {
   font-weight: bold;
 }
 
-.min {
+.min, .ampm {
     font-size: 0.7em;
 }
+
+
 </style>
 </head>
 <body>
   <main>
-    <ul id="arrivals"></ul>
+    <ul id="departures"></ul>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/protobufjs/dist/protobuf.min.js"></script>
@@ -62,7 +64,7 @@ li {
 
 const TARGET_STOP = "R03S"; // change to your stop
 
-const arrivalsEl = document.getElementById("arrivals");
+const departuresEl = document.getElementById("departures");
 
 let FeedMessage;
 
@@ -79,54 +81,62 @@ async function fetchTrains() {
     const message = FeedMessage.decode(new Uint8Array(buffer));
     const now = Math.floor(Date.now() / 1000);
 
-    const arrivals = [];
+    const departures = [];
 
     message.entity.forEach((entity) => {
       if (!entity.tripUpdate) return;
 
       entity.tripUpdate.stopTimeUpdate.forEach((update) => {
         if (update.stopId === TARGET_STOP) {
-          const timestamp = (update.arrival && update.arrival.time) ||
-              (update.departure && update.departure.time);
+          const timestamp = update.departure && update.departure.time;
 
           if (!timestamp) return;
 
           const secondsAway = timestamp - now;
 
           if (secondsAway > 0) {
-            arrivals.push({
+            departures.push({
               route: entity.tripUpdate.trip.routeId,
               seconds: secondsAway,
+              timestamp: timestamp
             });
           }
         }
       });
     });
 
-    arrivals.sort((a, b) => a.seconds - b.seconds);
-    render(arrivals.slice(0, 5));
+    departures.sort((a, b) => a.seconds - b.seconds);
+    render(departures.slice(0, 5));
 
   } catch (err) {
     console.error(err);
   }
 }
 
-function render(arrivals) {
-  arrivalsEl.innerHTML = "";
+function render(departures) {
+  departuresEl.innerHTML = "";
 
-  if (!arrivals.length) {
-    arrivalsEl.innerHTML = "<li>No upcoming trains</li>";
+  if (!departures.length) {
+    departuresEl.innerHTML = "<li>No upcoming trains</li>";
     return;
   }
 
-  arrivals.forEach(({ route, seconds }) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+  departures.forEach(({ route, seconds, timestamp }) => {
+    const minsAway = Math.floor(seconds / 60);
+    // const secsAway = seconds % 60;
+
+    var departureDate = new Date(timestamp * 1000);
+    var hours = departureDate.getHours();
+    var minutes = departureDate.getMinutes();
+    var ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    if (hours === 0) hours = 12;  // 12 AM / PM instead of 0
+    var departureTime = hours + ":" + (minutes < 10 ? "0" : "") + minutes;
 
     const li = document.createElement("li");
-    li.innerHTML = `<span class="route">${route}</span> <span class="time">${mins} <span class="min">min</span></span>`;
+    li.innerHTML = `<span class="route">${route}</span> <span class="time">${departureTime} <span class="ampm">${ampm}</span> &mdash; ${minsAway} <span class="min">min</span></span>`;
 
-    arrivalsEl.appendChild(li);
+    departuresEl.appendChild(li);
   });
 }
 
