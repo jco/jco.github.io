@@ -86,8 +86,8 @@ async function fetchTrains() {
 
       entity.tripUpdate.stopTimeUpdate.forEach((update) => {
         if (update.stopId === TARGET_STOP) {
-          const timestamp =
-            update.arrival?.time || update.departure?.time;
+          const timestamp = (update.arrival && update.arrival.time) ||
+              (update.departure && update.departure.time);
 
           if (!timestamp) return;
 
