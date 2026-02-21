@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Next Trains</title>
+<style type="text/css">
+html {
+  font-size: 48px;
+}
+
+body {
+  margin: 0;
+  background: #111;
+  color: #eee;
+  font-family: system-ui, sans-serif;
+}
+
+main {
+  margin: 1rem 4rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #333;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.route {
+    background-color: yellow;
+    color: black;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+  font-weight: bold;
+}
+
+.min {
+    font-size: 0.7em;
+}
+</style>
+</head>
+<body>
+  <main>
+    <ul id="arrivals"></ul>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/protobufjs/dist/protobuf.min.js"></script>
+  <script type="text/javascript">
+  const FEED_URL =
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw";
+
+const TARGET_STOP = "R03S"; // change to your stop
+
+const arrivalsEl = document.getElementById("arrivals");
+
+let FeedMessage;
+
+async function initProto() {
+  const root = await protobuf.load(
+    "https://raw.githubusercontent.com/google/transit/master/gtfs-realtime/proto/gtfs-realtime.proto"
+  );
+  FeedMessage = root.lookupType("transit_realtime.FeedMessage");
+}
+
+async function fetchTrains() {
+  try {
+    const response = await fetch(FEED_URL);
+    const buffer = await response.arrayBuffer();
+
+    const message = FeedMessage.decode(new Uint8Array(buffer));
+    const now = Math.floor(Date.now() / 1000);
+
+    const arrivals = [];
+
+    message.entity.forEach((entity) => {
+      if (!entity.tripUpdate) return;
+
+      entity.tripUpdate.stopTimeUpdate.forEach((update) => {
+        if (update.stopId === TARGET_STOP) {
+          const timestamp =
+            update.arrival?.time || update.departure?.time;
+
+          if (!timestamp) return;
+
+          const secondsAway = timestamp - now;
+
+          if (secondsAway > 0) {
+            arrivals.push({
+              route: entity.tripUpdate.trip.routeId,
+              seconds: secondsAway,
+            });
+          }
+        }
+      });
+    });
+
+    arrivals.sort((a, b) => a.seconds - b.seconds);
+    render(arrivals.slice(0, 5));
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function render(arrivals) {
+  arrivalsEl.innerHTML = "";
+
+  if (!arrivals.length) {
+    arrivalsEl.innerHTML = "<li>No upcoming trains</li>";
+    return;
+  }
+
+  arrivals.forEach(({ route, seconds }) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="route">${route}</span> <span class="time">${mins} <span class="min">min</span></span>`;
+
+    arrivalsEl.appendChild(li);
+  });
+}
+
+(async () => {
+  await initProto();
+  await fetchTrains();
+  setInterval(fetchTrains, 10000);
+})();
+</script>
+</body>
+</html>
