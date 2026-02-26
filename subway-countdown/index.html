@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -41,6 +41,9 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  box-sizing: border-box; 
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: black; /* keep same as page background */
 }
 
 li {
